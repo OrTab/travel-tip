@@ -40,3 +40,13 @@ button {
     top: 0%;
     background-color: transparent;
 }
+
+.search-my-locs {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.search-my-locs button {
+    margin: 0.2rem;
+}

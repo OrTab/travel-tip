@@ -1,3 +1,5 @@
+'use strict'
+
 import { locationService } from './services/location-service.js'
 
 
@@ -8,7 +10,7 @@ var currPos;
 window.onload = () => {
     initMap()
         .then(() => {
-            addMarker({ lat: 32.0749831, lng: 34.9120554 })
+            addMarker({ lat: 25.7706106, lng: 34.9120554 })
         })
         // .catch(console.log('INIT MAP ERROR(Not Real Error)'));
 
@@ -30,6 +32,7 @@ window.onload = () => {
 
     })
     onLoadLocations()
+    events()
 }
 
 
@@ -128,4 +131,24 @@ function renderLocationsToTable(locations) {
         `
     }).join('');
     document.querySelector('.locations-inner-container').innerHTML = strHTMLs;
+}
+
+function onSearchLocation(ev) {
+    ev.preventDefault()
+    const elSearchLocation = document.querySelector('input[name=search-loc]')
+    locationService.getSearchCords(elSearchLocation.value)
+        .then(moveToSearchLocation)
+        .catch(err => console.log('Sorry', err))
+}
+
+
+function moveToSearchLocation(adress) {
+    const searchedCords = adress.results[0].geometry.location
+    panTo(searchedCords.lat, searchedCords.lng)
+    currPos = searchedCords
+    onShowModal()
+}
+
+function events() {
+    document.querySelector('.onSearch').addEventListener('submit', onSearchLocation)
 }
