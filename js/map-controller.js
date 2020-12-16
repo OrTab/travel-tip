@@ -91,5 +91,5 @@ function onShowModal() {
 function onAddLoction() {
     var elInputLocation = document.querySelector('input[name=selected-loc]')
     document.querySelector('.modal').style.display = 'none'
-    locationService.createLocation(elInputLocation.nodeValue, currPos.lat, currPos.lang)
+    locationService.createLocation(elInputLocation.value, currPos.lat, currPos.lng)
 }
