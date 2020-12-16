@@ -3,16 +3,18 @@
     height: 400px;
 }
 
-.locations-map-container{
+button {
+    cursor: pointer;
+}
+
+.locations-map-container {
     background-color: rgb(218, 218, 218);
     width: 500px;
 }
 
-.locations-inner-container{
-    
-}
+.locations-inner-container {}
 
-.location-item{
+.location-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -30,4 +32,11 @@
     width: 20rem;
     height: 10rem;
     display: none;
+}
+
+.close-modal {
+    position: absolute;
+    right: 0;
+    top: 0%;
+    background-color: transparent;
 }

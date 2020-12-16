@@ -10,11 +10,11 @@ window.onload = () => {
         .then(() => {
             addMarker({ lat: 32.0749831, lng: 34.9120554 })
         })
-        .catch(console.log('INIT MAP ERROR'));
+        // .catch(console.log('INIT MAP ERROR(Not Real Error)'));
 
     getUserPosition()
         .then(pos => {
-            console.log('User position is:', pos.coords);
+            // console.log('User position is:', pos.coords);
         })
         .catch(err => {
             console.log('err!!!!!!', err);
@@ -26,13 +26,20 @@ window.onload = () => {
     })
     locationService.loadLocationsFromStorage();
     renderLocationsToTable();
+    document.querySelector('.my-loc-btn').addEventListener('click', () => {
+        getUserPosition()
+            .then((pos) => panTo(pos.coords.latitude, pos.coords.longitude))
+
+
+
+    })
 }
 
 
 export function initMap(lat = 32.0749831, lng = 34.9120554) {
     return _connectGoogleApi()
         .then(() => {
-            console.log('google available');
+            // console.log('google available');
             gGoogleMap = new google.maps.Map(
                 document.querySelector('#map'), {
                 center: { lat, lng },
@@ -40,9 +47,7 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
             })
             gGoogleMap.addListener('click', (ev) => {
                 currPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
-                addMarker(currPos)
                 onShowModal()
-
             })
         })
 }
@@ -59,6 +64,7 @@ function addMarker(loc) {
 function panTo(lat, lng) {
     var laLatLng = new google.maps.LatLng(lat, lng);
     gGoogleMap.panTo(laLatLng);
+    addMarker({ lat, lng })
 }
 
 function getUserPosition() {
@@ -86,6 +92,13 @@ function onShowModal() {
     const elbtn = document.querySelector('.add-location-btn')
     elbtn.addEventListener('click', onAddLoction)
     document.querySelector('.modal').style.display = 'flex'
+    const elModal = document.querySelector('.modal')
+    const elAddLocBtn = document.querySelector('.add-location-btn')
+    elAddLocBtn.addEventListener('click', onAddLoction)
+    document.querySelector('.close-modal').addEventListener('click', () => {
+        elModal.style.display = 'none'
+    })
+    elModal.style.display = 'flex'
 }
 
 function onAddLoction() {
@@ -115,4 +128,6 @@ function renderLocationsToTable(locations) {
         `
     }).join('');
     document.querySelector('.locations-inner-container').innerHTML = strHTMLs;
+    addMarker(currPos)
+    elInputLocation.value = ''
 }

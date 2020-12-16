@@ -1,7 +1,8 @@
 export const locationService = {
     getLocations,
     createLocation,
-    loadLocationsFromStorage
+    loadLocationsFromStorage,
+    getLocationById
 }
 
 const STORAGE_KEY = 'locationsDB'
@@ -32,4 +33,12 @@ function createLocation(name, lat, lang) {
     }
     gLocations.push(location)
     storageService.saveToStorage(STORAGE_KEY, gLocations)
+    console.log(gLocations);
+}
+
+function getLocationById(id) {
+    const location = gLocations.find(location => {
+        return location.id === id
+    })
+    return location
 }
