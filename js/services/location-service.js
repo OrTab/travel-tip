@@ -1,9 +1,12 @@
+'use strict'
+
 export const locationService = {
     getLocations,
     createLocation,
     getLocationById,
     deleteLocation,
-    saveEdit
+    saveEdit,
+    getSearchCords
 }
 
 const STORAGE_KEY = 'locationsDB'
@@ -61,3 +64,13 @@ function saveEdit(locId, newName) {
     const locIdx = getLocationIdxById(locId);
     gLocations[locIdx].name = newName;
 }
+
+function getSearchCords(address) {
+    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=AIzaSyCEJl0w5I2nD7X9lQvtBWN5f02Xp1skT1A`)
+        .then(res => {
+            // console.log('Axios res:', res);
+            return res.data
+        })
+        .catch(err => err)
+}
+// AIzaSyCEJl0w5I2nD7X9lQvtBWN5f02Xp1skT1A

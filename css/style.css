@@ -41,18 +41,28 @@ button {
     background-color: transparent;
 }
 
-.location-item{
+.location-item {
     position: relative;
 }
 
-.edit-input-container{
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
-        background-color: aliceblue;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+.edit-input-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: aliceblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-my-locs {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.search-my-locs button {
+    margin: 0.2rem;
 }
