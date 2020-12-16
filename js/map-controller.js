@@ -41,6 +41,7 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
                 currPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
                 addMarker(currPos)
                 onShowModal()
+
             })
         })
 }
@@ -81,5 +82,14 @@ function _connectGoogleApi() {
 }
 
 function onShowModal() {
-    var elModal = document.querySelector('.modal').hidden = false
+    const elbtn = document.querySelector('.add-location-btn')
+    elbtn.addEventListener('click', onAddLoction)
+    document.querySelector('.modal').style.display = 'flex'
+
+}
+
+function onAddLoction() {
+    var elInputLocation = document.querySelector('input[name=selected-loc]')
+    document.querySelector('.modal').style.display = 'none'
+    locationService.createLocation(elInputLocation.nodeValue, currPos.lat, currPos.lang)
 }
