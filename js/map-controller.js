@@ -1,7 +1,6 @@
 import { locationService } from './services/location-service.js'
 
 
-// console.log('locationService', locationService);
 
 var gGoogleMap;
 
@@ -17,7 +16,7 @@ window.onload = () => {
             console.log('User position is:', pos.coords);
         })
         .catch(err => {
-            console.log('err!!!!!!!!!!', err);
+            console.log('err!!!!!!', err);
         })
 
     document.querySelector('.btn').addEventListener('click', (ev) => {
