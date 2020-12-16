@@ -24,15 +24,12 @@ window.onload = () => {
         console.log('Aha', ev.target);
         panTo(35.6895, 139.6917);
     })
-    locationService.loadLocationsFromStorage();
-    renderLocationsToTable();
     document.querySelector('.my-loc-btn').addEventListener('click', () => {
         getUserPosition()
             .then((pos) => panTo(pos.coords.latitude, pos.coords.longitude))
 
-
-
     })
+    onLoadLocations()
 }
 
 
@@ -42,9 +39,9 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
             // console.log('google available');
             gGoogleMap = new google.maps.Map(
                 document.querySelector('#map'), {
-                center: { lat, lng },
-                zoom: 15
-            })
+                    center: { lat, lng },
+                    zoom: 15
+                })
             gGoogleMap.addListener('click', (ev) => {
                 currPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
                 onShowModal()
@@ -105,29 +102,30 @@ function onAddLoction() {
     var elInputLocation = document.querySelector('input[name=selected-loc]')
     document.querySelector('.modal').style.display = 'none'
     locationService.createLocation(elInputLocation.value, currPos.lat, currPos.lng)
-    onLocationsChange();
+    addMarker(currPos)
+    elInputLocation.value = ''
+    onLoadLocations();
 }
 
 
-function onLocationsChange() {
+function onLoadLocations() {
     locationService.getLocations()
-        .then(renderLocationsToTable)
+        .then(locations => {
+            if (locations.length) renderLocationsToTable(locations)
+        })
 }
 
 function renderLocationsToTable(locations) {
-    if (!locations || locations.length === 0) return;
     let strHTMLs = locations.map(location => {
         return `
         <div class="location-item">
-                <h3 class="location-name">${location.name}</h3>
-                <div class="location-edit-delete-container">
-                    <button class="edit-btn" onclick>edit</button>
-                    <button class="delete-btn">delete</button>
-                </div>
-            </div>
+        <h3 class="location-name">${location.name}</h3>
+        <div class="location-edit-delete-container">
+        <button class="edit-btn">Edit</button>
+        <button class="delete-btn">Delete</button>
+        </div>
+        </div>
         `
     }).join('');
     document.querySelector('.locations-inner-container').innerHTML = strHTMLs;
-    addMarker(currPos)
-    elInputLocation.value = ''
 }

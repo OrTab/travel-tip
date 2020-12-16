@@ -1,7 +1,6 @@
 export const locationService = {
     getLocations,
     createLocation,
-    loadLocationsFromStorage,
     getLocationById
 }
 
@@ -14,6 +13,7 @@ import { storageService } from '../../util/travel-tip-storage.js'
 var gLocations = [];
 
 function getLocations() {
+    if (!gLocations.length) loadLocationsFromStorage()
     return Promise.resolve(gLocations)
 }
 
@@ -33,7 +33,6 @@ function createLocation(name, lat, lang) {
     }
     gLocations.push(location)
     storageService.saveToStorage(STORAGE_KEY, gLocations)
-    console.log(gLocations);
 }
 
 function getLocationById(id) {
