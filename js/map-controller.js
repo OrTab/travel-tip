@@ -8,7 +8,7 @@ var gGoogleMap;
 window.onload = () => {
     initMap()
         .then(() => {
-            addMarker({ lat: 32.0749831, lng: 34.9120554 });
+            addMarker({ lat: 32.0749831, lng: 34.9120554 })
         })
         .catch(console.log('INIT MAP ERROR'));
 
@@ -24,6 +24,7 @@ window.onload = () => {
         console.log('Aha', ev.target);
         panTo(35.6895, 139.6917);
     })
+
 }
 
 
@@ -36,7 +37,10 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
                     center: { lat, lng },
                     zoom: 15
                 })
-            console.log('Map!', gGoogleMap);
+            gGoogleMap.addListener('click', (ev) => {
+                const currPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
+                addMarker(currPos)
+            })
         })
 }
 
