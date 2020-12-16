@@ -1,7 +1,9 @@
 export const locationService = {
     getLocations,
     createLocation,
-    getLocationById
+    getLocationById,
+    deleteLocation,
+    saveEdit
 }
 
 const STORAGE_KEY = 'locationsDB'
@@ -22,12 +24,12 @@ function loadLocationsFromStorage() {
     gLocations = (loadedLocations) ? loadedLocations : [];
 }
 
-function createLocation(name, lat, lang) {
+function createLocation(name, lat, lng) {
     const location = {
         id: utilService.makeId(),
         name,
         lat,
-        lang,
+        lng,
         createdAt: Date.now(),
         updatedAt: Date.now()
     }
@@ -40,4 +42,22 @@ function getLocationById(id) {
         return location.id === id
     })
     return location
+}
+
+function getLocationIdxById(id) {
+    const location = gLocations.findIndex(location => {
+        return location.id === id
+    })
+    return location
+}
+
+function deleteLocation(locId) {
+    const locIdx = getLocationIdxById(locId);
+    gLocations.splice(locIdx, 1);
+    storageService.saveToStorage(STORAGE_KEY, gLocations)
+}
+
+function saveEdit(locId, newName) {
+    const locIdx = getLocationIdxById(locId);
+    gLocations[locIdx].name = newName;
 }

@@ -40,3 +40,19 @@ button {
     top: 0%;
     background-color: transparent;
 }
+
+.location-item{
+    position: relative;
+}
+
+.edit-input-container{
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background-color: aliceblue;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}

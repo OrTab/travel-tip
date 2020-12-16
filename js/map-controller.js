@@ -10,7 +10,7 @@ window.onload = () => {
         .then(() => {
             addMarker({ lat: 32.0749831, lng: 34.9120554 })
         })
-        // .catch(console.log('INIT MAP ERROR(Not Real Error)'));
+    // .catch(console.log('INIT MAP ERROR(Not Real Error)'));
 
     getUserPosition()
         .then(pos => {
@@ -39,9 +39,9 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
             // console.log('google available');
             gGoogleMap = new google.maps.Map(
                 document.querySelector('#map'), {
-                    center: { lat, lng },
-                    zoom: 15
-                })
+                center: { lat, lng },
+                zoom: 15
+            })
             gGoogleMap.addListener('click', (ev) => {
                 currPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
                 onShowModal()
@@ -111,8 +111,39 @@ function onAddLoction() {
 function onLoadLocations() {
     locationService.getLocations()
         .then(locations => {
-            if (locations.length) renderLocationsToTable(locations)
+            renderLocationsToTable(locations)
         })
+}
+
+function onGoToLocation() {
+    const locLat = this.dataset.lat;
+    const locLng = this.dataset.lng;
+    panTo(+locLat, +locLng);
+}
+
+function onDeleteLocation() {
+    const locId = this.parentNode.dataset.id;
+    locationService.deleteLocation(locId);
+    onLoadLocations();
+}
+
+function onEditLocation() {
+    const locId = this.parentNode.dataset.id;
+    const elEditContainer = document.querySelector(`.edit-${locId}`);
+    const elEditInput = document.querySelector(`.edit-${locId} input`);
+    elEditContainer.style.display = '';
+    elEditInput.value = locationService.getLocationById(locId).name;
+}
+
+function onSaveEdit() {
+    const locId = this.dataset.id;
+    console.log(locId);
+    const elEditContainer = document.querySelector(`.edit-${locId}`);
+    const inputValue = document.querySelector(`.edit-${locId} input`).value;
+    console.log(inputValue);
+    locationService.saveEdit(locId, inputValue);
+    elEditContainer.style.display = 'none';
+    onLoadLocations();
 }
 
 function renderLocationsToTable(locations) {
@@ -120,12 +151,29 @@ function renderLocationsToTable(locations) {
         return `
         <div class="location-item">
         <h3 class="location-name">${location.name}</h3>
-        <div class="location-edit-delete-container">
+        <div class="edit-input-container edit-${location.id}" style="display:none;">
+        <input type="text">
+        <button class="save-edit-btn" data-id="${location.id}">Save</button>
+        </div>
+        <div class="location-btns-container" data-id="${location.id}">
         <button class="edit-btn">Edit</button>
         <button class="delete-btn">Delete</button>
+        <button class="go-to-btn" data-lat="${location.lat}" data-lng="${location.lng}">Go</button>
         </div>
         </div>
         `
     }).join('');
     document.querySelector('.locations-inner-container').innerHTML = strHTMLs;
+    addBtnEventListeners();
+}
+
+function addBtnEventListeners() {
+    const elEditBtns = document.querySelectorAll('.edit-btn')
+    const elSaveBtns = document.querySelectorAll('.save-edit-btn')
+    const elDeleteBtns = document.querySelectorAll('.delete-btn')
+    const elGoToBtns = document.querySelectorAll('.go-to-btn')
+    elEditBtns.forEach(btn => btn.addEventListener('click', onEditLocation))
+    elSaveBtns.forEach(btn => btn.addEventListener('click', onSaveEdit))
+    elDeleteBtns.forEach(btn => btn.addEventListener('click', onDeleteLocation))
+    elGoToBtns.forEach(btn => btn.addEventListener('click', onGoToLocation))
 }
