@@ -63,6 +63,8 @@ function deleteLocation(locId) {
 function saveEdit(locId, newName) {
     const locIdx = getLocationIdxById(locId);
     gLocations[locIdx].name = newName;
+    gLocations.updatedAt = Date.now()
+    storageService.saveToStorage(STORAGE_KEY, gLocations)
 }
 
 function getSearchCords(address) {

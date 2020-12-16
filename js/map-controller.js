@@ -12,7 +12,7 @@ window.onload = () => {
         .then(() => {
             addMarker({ lat: 25.7706106, lng: 34.9120554 })
         })
-    // .catch(console.log('INIT MAP ERROR(Not Real Error)'));
+        // .catch(console.log('INIT MAP ERROR(Not Real Error)'));
 
     getUserPosition()
         .then(pos => {
@@ -42,9 +42,9 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
             // console.log('google available');
             gGoogleMap = new google.maps.Map(
                 document.querySelector('#map'), {
-                center: { lat, lng },
-                zoom: 15
-            })
+                    center: { lat, lng },
+                    zoom: 15
+                })
             gGoogleMap.addListener('click', (ev) => {
                 currPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
                 onShowModal()
@@ -140,10 +140,8 @@ function onEditLocation() {
 
 function onSaveEdit() {
     const locId = this.dataset.id;
-    console.log(locId);
     const elEditContainer = document.querySelector(`.edit-${locId}`);
     const inputValue = document.querySelector(`.edit-${locId} input`).value;
-    console.log(inputValue);
     locationService.saveEdit(locId, inputValue);
     elEditContainer.style.display = 'none';
     onLoadLocations();
