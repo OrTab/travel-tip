@@ -24,7 +24,8 @@ window.onload = () => {
         console.log('Aha', ev.target);
         panTo(35.6895, 139.6917);
     })
-
+    locationService.loadLocationsFromStorage();
+    renderLocationsToTable();
 }
 
 
@@ -34,9 +35,9 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
             console.log('google available');
             gGoogleMap = new google.maps.Map(
                 document.querySelector('#map'), {
-                    center: { lat, lng },
-                    zoom: 15
-                })
+                center: { lat, lng },
+                zoom: 15
+            })
             gGoogleMap.addListener('click', (ev) => {
                 currPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
                 addMarker(currPos)
@@ -85,11 +86,33 @@ function onShowModal() {
     const elbtn = document.querySelector('.add-location-btn')
     elbtn.addEventListener('click', onAddLoction)
     document.querySelector('.modal').style.display = 'flex'
-
 }
 
 function onAddLoction() {
     var elInputLocation = document.querySelector('input[name=selected-loc]')
     document.querySelector('.modal').style.display = 'none'
     locationService.createLocation(elInputLocation.value, currPos.lat, currPos.lng)
+    onLocationsChange();
+}
+
+
+function onLocationsChange() {
+    locationService.getLocations()
+        .then(renderLocationsToTable)
+}
+
+function renderLocationsToTable(locations) {
+    if (!locations || locations.length === 0) return;
+    let strHTMLs = locations.map(location => {
+        return `
+        <div class="location-item">
+                <h3 class="location-name">${location.name}</h3>
+                <div class="location-edit-delete-container">
+                    <button class="edit-btn" onclick>edit</button>
+                    <button class="delete-btn">delete</button>
+                </div>
+            </div>
+        `
+    }).join('');
+    document.querySelector('.locations-inner-container').innerHTML = strHTMLs;
 }
