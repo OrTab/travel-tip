@@ -10,11 +10,11 @@ window.onload = () => {
         .then(() => {
             addMarker({ lat: 32.0749831, lng: 34.9120554 })
         })
-        .catch(console.log('INIT MAP ERROR'));
+        // .catch(console.log('INIT MAP ERROR(Not Real Error)'));
 
     getUserPosition()
         .then(pos => {
-            console.log('User position is:', pos.coords);
+            // console.log('User position is:', pos.coords);
         })
         .catch(err => {
             console.log('err!!!!!!', err);
@@ -24,14 +24,20 @@ window.onload = () => {
         console.log('Aha', ev.target);
         panTo(35.6895, 139.6917);
     })
+    document.querySelector('.my-loc-btn').addEventListener('click', () => {
+        getUserPosition()
+            .then((pos) => panTo(pos.coords.latitude, pos.coords.longitude))
 
+
+
+    })
 }
 
 
 export function initMap(lat = 32.0749831, lng = 34.9120554) {
     return _connectGoogleApi()
         .then(() => {
-            console.log('google available');
+            // console.log('google available');
             gGoogleMap = new google.maps.Map(
                 document.querySelector('#map'), {
                     center: { lat, lng },
@@ -39,9 +45,7 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
                 })
             gGoogleMap.addListener('click', (ev) => {
                 currPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
-                addMarker(currPos)
                 onShowModal()
-
             })
         })
 }
@@ -58,6 +62,7 @@ function addMarker(loc) {
 function panTo(lat, lng) {
     var laLatLng = new google.maps.LatLng(lat, lng);
     gGoogleMap.panTo(laLatLng);
+    addMarker({ lat, lng })
 }
 
 function getUserPosition() {
@@ -82,14 +87,19 @@ function _connectGoogleApi() {
 }
 
 function onShowModal() {
-    const elbtn = document.querySelector('.add-location-btn')
-    elbtn.addEventListener('click', onAddLoction)
-    document.querySelector('.modal').style.display = 'flex'
-
+    const elModal = document.querySelector('.modal')
+    const elAddLocBtn = document.querySelector('.add-location-btn')
+    elAddLocBtn.addEventListener('click', onAddLoction)
+    document.querySelector('.close-modal').addEventListener('click', () => {
+        elModal.style.display = 'none'
+    })
+    elModal.style.display = 'flex'
 }
 
 function onAddLoction() {
     var elInputLocation = document.querySelector('input[name=selected-loc]')
     document.querySelector('.modal').style.display = 'none'
     locationService.createLocation(elInputLocation.value, currPos.lat, currPos.lng)
+    addMarker(currPos)
+    elInputLocation.value = ''
 }
