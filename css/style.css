@@ -3,6 +3,21 @@
     height: 400px;
 }
 
+.locations-map-container{
+    background-color: rgb(218, 218, 218);
+    width: 500px;
+}
+
+.locations-inner-container{
+    
+}
+
+.location-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .modal {
     position: absolute;
     top: 10%;
