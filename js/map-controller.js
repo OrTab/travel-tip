@@ -3,6 +3,7 @@ import { locationService } from './services/location-service.js'
 
 
 var gGoogleMap;
+var currPos;
 
 window.onload = () => {
     initMap()
@@ -37,8 +38,9 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
                     zoom: 15
                 })
             gGoogleMap.addListener('click', (ev) => {
-                const currPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
+                currPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
                 addMarker(currPos)
+                onShowModal()
             })
         })
 }
@@ -76,4 +78,8 @@ function _connectGoogleApi() {
         elGoogleApi.onload = resolve;
         elGoogleApi.onerror = () => reject('Google script failed to load')
     })
+}
+
+function onShowModal() {
+    var elModal = document.querySelector('.modal').hidden = false
 }
