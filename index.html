@@ -6,24 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ES6</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <h1>ES6</h1>
-    <button class="copy-url-btn">Copy URL</button>
-
-    <button class="btn">Click Me</button>
-    <div class="search-my-locs">
-        <form class="onSearch">
-            <input type="text" name="search-loc" placeholder="Search For Location">
-            <button type="submit" class="search-btn">Go</button>
-        </form>
-        <button class="my-loc-btn">My Location</button>
+    <header>
+        <h1>Your Best Places!</h1>
+    </header>
+    <div class="top-toolbar-container">
+        <div class="toolbar-left">
+            <button class="copy-url-btn">Copy URL</button>
+            <button class="btn">Click Me</button>
+        </div>
+        <div class="search-my-locs">
+            <form class="onSearch">
+                <input type="text" name="search-loc" placeholder="Search For Location">
+                <button type="submit" class="search-btn">Go</button>
+            </form>
+            <button class="my-loc-btn">My Location</button>
+        </div>
     </div>
-    <div id="map"></div>
 
-    <div class="locations-map-container">
-        <div class="locations-inner-container">
+    <div class="map-and-table-container">
+        <div id="map"></div>
+        <div class="locations-map-container">
+            <div class="locations-inner-container">
+            </div>
         </div>
     </div>
     <div class="modal">

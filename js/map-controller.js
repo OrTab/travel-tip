@@ -5,14 +5,14 @@ import { locationService } from './services/location-service.js'
 
 
 var gGoogleMap;
-var currPos;
+var gCurrPos;
 
 window.onload = () => {
     initMap()
         .then(() => {
             addMarker({ lat: 25.7706106, lng: 34.9120554 })
         })
-        // .catch(console.log('INIT MAP ERROR(Not Real Error)'));
+    // .catch(console.log('INIT MAP ERROR(Not Real Error)'));
 
     getUserPosition()
         .then(pos => {
@@ -28,7 +28,11 @@ window.onload = () => {
     })
     document.querySelector('.my-loc-btn').addEventListener('click', () => {
         getUserPosition()
-            .then((pos) => panTo(pos.coords.latitude, pos.coords.longitude))
+            .then((pos) => {
+                gCurrPos = pos.coords;
+                panTo(pos.coords.latitude, pos.coords.longitude)
+            }
+            )
 
     })
     onLoadLocations()
@@ -42,11 +46,11 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
             // console.log('google available');
             gGoogleMap = new google.maps.Map(
                 document.querySelector('#map'), {
-                    center: { lat, lng },
-                    zoom: 15
-                })
+                center: { lat, lng },
+                zoom: 15
+            })
             gGoogleMap.addListener('click', (ev) => {
-                currPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
+                gCurrPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
                 onShowModal()
             })
         })
@@ -104,8 +108,8 @@ function onShowModal() {
 function onAddLoction() {
     var elInputLocation = document.querySelector('input[name=selected-loc]')
     document.querySelector('.modal').style.display = 'none'
-    locationService.createLocation(elInputLocation.value, currPos.lat, currPos.lng)
-    addMarker(currPos)
+    locationService.createLocation(elInputLocation.value, gCurrPos.lat, gCurrPos.lng)
+    addMarker(gCurrPos)
     elInputLocation.value = ''
     onLoadLocations();
 }
@@ -121,6 +125,7 @@ function onLoadLocations() {
 function onGoToLocation() {
     const locLat = this.dataset.lat;
     const locLng = this.dataset.lng;
+    gCurrPos = { lat: locLat, lng: locLng };
     panTo(+locLat, +locLng);
 }
 
@@ -191,10 +196,29 @@ function onSearchLocation(ev) {
 function moveToSearchLocation(adress) {
     const searchedCords = adress.results[0].geometry.location
     panTo(searchedCords.lat, searchedCords.lng)
-    currPos = searchedCords
+    gCurrPos = searchedCords
     onShowModal()
 }
 
 function events() {
     document.querySelector('.onSearch').addEventListener('submit', onSearchLocation)
+    document.querySelector('.copy-url-btn').addEventListener('click', onCopyUrl)
+}
+
+function onCopyUrl() {
+    var copyUrl = window.location.href;
+    if (gCurrPos) copyUrl += `?lat=${gCurrPos.lat}&lng=${gCurrPos.lng}`;
+    navigator.clipboard.writeText(copyUrl)
+        .then(() => { console.log(`Copied!`) })
+        .catch((error) => { console.log(`Copy failed! ${error}`) })
+}
+
+function getLatLngParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const latParam = urlParams.get('lat');
+    const lngParam = urlParams.get('lng');
+    return new Promise((resolve, reject) => {
+        if (latParam && lngParam) resolve(latParam, lngParam)
+        else reject('No starting location params found');
+    })
 }
