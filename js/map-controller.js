@@ -9,18 +9,14 @@ var gCurrPos;
 
 window.onload = () => {
     initMap()
-        .then(() => {
-            addMarker({ lat: 25.7706106, lng: 34.9120554 })
-        })
-    // .catch(console.log('INIT MAP ERROR(Not Real Error)'));
+        .then(getUserPosition)
+        .then((pos) => {
+            pos = { lat: pos.coords.latitude, lng: pos.coords.longitude }
+            gCurrPos = pos
+            panTo(pos.lat, pos.lng)
+        }).catch(err => console.log('Sorry', err))
 
-    getUserPosition()
-        .then(pos => {
-            // console.log('User position is:', pos.coords);
-        })
-        .catch(err => {
-            console.log('err!!!!!!', err);
-        })
+    .catch(err => console.log('Sorry', err));
 
     document.querySelector('.btn').addEventListener('click', (ev) => {
         console.log('Aha', ev.target);
@@ -29,10 +25,10 @@ window.onload = () => {
     document.querySelector('.my-loc-btn').addEventListener('click', () => {
         getUserPosition()
             .then((pos) => {
-                gCurrPos = pos.coords;
-                panTo(pos.coords.latitude, pos.coords.longitude)
-            }
-            )
+                pos = { lat: pos.coords.latitude, lng: pos.coords.longitude }
+                gCurrPos = pos
+                panTo(pos.lat, pos.lng)
+            })
 
     })
     onLoadLocations()
@@ -46,9 +42,9 @@ export function initMap(lat = 32.0749831, lng = 34.9120554) {
             // console.log('google available');
             gGoogleMap = new google.maps.Map(
                 document.querySelector('#map'), {
-                center: { lat, lng },
-                zoom: 15
-            })
+                    center: { lat, lng },
+                    zoom: 15
+                })
             gGoogleMap.addListener('click', (ev) => {
                 gCurrPos = { lat: ev.latLng.lat(), lng: ev.latLng.lng() }
                 onShowModal()
