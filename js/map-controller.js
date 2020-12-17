@@ -32,7 +32,7 @@ window.onload = () => {
                 pos = { lat: pos.coords.latitude, lng: pos.coords.longitude }
                 gCurrPos = pos
                 panTo(pos.lat, pos.lng)
-            })
+            }).catch(() => alert('Your Location Disabled'))
 
     })
     onLoadLocations()
