@@ -6,7 +6,8 @@ export const locationService = {
     getLocationById,
     deleteLocation,
     saveEdit,
-    getSearchCords
+    getSearchCords,
+    getWeather
 }
 
 const STORAGE_KEY = 'locationsDB'
@@ -75,4 +76,22 @@ function getSearchCords(address) {
         })
         .catch(err => err)
 }
-// AIzaSyCEJl0w5I2nD7X9lQvtBWN5f02Xp1skT1A
+
+
+
+// function getWeather(lat, lng) {
+// api.openweathermap.org/data/2.5/weather?q={London}&appid={b58171250156a2219b063a6a71af7b4a}
+//     const hi = `api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=b58171250156a2219b063a6a71af7b4a`
+//     console.log(hi);
+//     fetch(hi)
+//         .then(response => console.log(response.status))
+//         .then(data => console.log(data))
+// }
+
+// .catch(err => console.log(err))
+// b58171250156a2219b063a6a71af7b4a
+//     console.log(hi);
+//     return axios.get(hi)
+//         .then(res => {
+//             console.log('Axios res:', res);
+//             return res.data
