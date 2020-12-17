@@ -7,7 +7,6 @@ export const locationService = {
     deleteLocation,
     saveEdit,
     getSearchCords,
-    getWeather
 }
 
 const STORAGE_KEY = 'locationsDB'
