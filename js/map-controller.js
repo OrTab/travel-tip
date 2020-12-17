@@ -14,7 +14,11 @@ window.onload = () => {
             pos = { lat: pos.coords.latitude, lng: pos.coords.longitude }
             gCurrPos = pos
             panTo(pos.lat, pos.lng)
-        }).catch(err => console.log('Sorry', err))
+        }).catch(err => {
+            console.log('Sorry', err)
+            panTo(lat = 32.0749831, lng = 42.912554)
+
+        })
 
     .catch(err => console.log('Sorry', err));
 
